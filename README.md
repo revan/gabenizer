@@ -26,5 +26,5 @@ Then push the repo upstream
 
 That's it, you can now checkout your application at:
 
-    http://flask-$yourdomain.rhcloud.com
+    http://flask-$yournamespace.rhcloud.com
 
