@@ -10,7 +10,7 @@ Running on OpenShift
 
 Create an account at http://openshift.redhat.com/
 
-Create a rack-1.1 application
+Create a wsgi-3.2 application
 
     rhc-create-app -a flask -t wsgi-3.2
 
