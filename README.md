@@ -1,8 +1,8 @@
-Flask on OpenShift Express
-============================
+Flask on OpenShift
+==================
 
 This git repository helps you get up and running quickly w/ a Flask installation
-on OpenShift Express.
+on OpenShift.
 
 
 Running on OpenShift
