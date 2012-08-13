@@ -31,8 +31,10 @@ That's it, you can now checkout your application at:
 ------------------------------
 
 To get more log messages in your openshift logs please add the following line to your code
+
 app.config['PROPAGATE_EXCEPTIONS'] = True  
 
 To read more about logging in Flask please see this email
+
 http://flask.pocoo.org/mailinglist/archive/2012/1/27/catching-exceptions-from-flask/
 
