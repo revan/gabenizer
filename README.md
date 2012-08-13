@@ -28,3 +28,8 @@ That's it, you can now checkout your application at:
 
     http://flask-$yournamespace.rhcloud.com
 
+------------------------------
+
+To get more log messages in your openshift logs please add the following line to your code
+app.config['PROPAGATE_EXCEPTIONS'] = True  
+
