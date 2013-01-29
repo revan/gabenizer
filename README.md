@@ -17,7 +17,7 @@ Create a python-2.6 application
 Add this upstream flask repo
 
     cd flask
-    git remote add upstream -m master git://github.com/openshift/flask-example.git
+    git remote add upstream -m master https://github.com/openshift/flask-example.git
     git pull -s recursive -X theirs upstream master
     
 Then push the repo upstream
