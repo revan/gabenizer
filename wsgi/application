@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(__file__) or '.')
 
 PY_DIR = os.path.join(os.environ['OPENSHIFT_HOMEDIR'], "python")
 
-virtenv = os.path.join(PY_DIR, '/virtenv/')
+virtenv = PY_DIR + '/virtenv/'
 
 PY_CACHE = os.path.join(virtenv, 'lib', '2.6', 'site-packages')
 
