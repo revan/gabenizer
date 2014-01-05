@@ -1,3 +1,0 @@
-[submodule "imgur-python"]
-	path = imgur-python
-	url = git@github.com:jacobgreenleaf/imgur-python.git
