@@ -1,8 +1,10 @@
 import time
 import praw
 import unirest
+import urllib, cStringIO
 from urlparse import urlparse
 from pprint import pprint
+from PIL import Image
 from config import SUBREDDIT, IMGUR_ID, IMGUR_SECRET, SKYBIO_ID, SKYBIO_SECRET
 
 r = praw.Reddit('gabenizer bot')
@@ -40,7 +42,52 @@ for pic in submissions:
 			+'&detector=aggressive'
 			+'&attributes=none'
 			+'&urls='+url)
-	print response
 	pprint(vars(response))
 
 	#image manipulation
+	#get image values
+	original_roll = response.body['photos'][0]['tags'][0]['roll']
+	original_center_x = response.body['photos'][0]['tags'][0]['center']['x']
+	original_center_y = response.body['photos'][0]['tags'][0]['center']['y']
+	original_size = response.body['photos'][0]['tags'][0]['width']
+	original_height = response.body['photos'][0]['height']
+	original_width = response.body['photos'][0]['width']
+
+	#hardcoded values for gaben
+	gaben_roll = -1
+	gaben_center_x = 47.02
+	gaben_center_y = 59.28
+	gaben_size = 51.76
+	gaben_height = 663
+	gaben_width = 655
+
+	#calculate values for scale and position
+	scale = (original_size * original_width) / (gaben_size * gaben_width)
+	scale_height = gaben_height * scale
+	scale_width = gaben_width * scale
+	place_x = (0.01 * original_center_x * original_width) - (0.01 * gaben_center_x * scale_width)
+	place_y = (0.01 * original_center_y * original_height) - (0.01 * gaben_center_y * scale_height)
+
+	print scale
+	print scale_height
+	print scale_width
+	print place_x
+	print place_y
+
+	#open images
+	try:
+		original = Image.open(cStringIO.StringIO(urllib.urlopen(url).read()))
+		gaben = Image.open('gaben.png')
+	except:
+		continue
+
+	#rotate gaben to match roll
+	gaben = gaben.rotate(int(original_roll - gaben_roll))
+
+	#resize gaben
+	gaben = gaben.resize((int(scale_width), int(scale_height)))
+
+	gabenized = original.copy()
+	gabenized.paste(gaben, (int(place_x), int(place_y)), gaben)
+	gabenized.save('gabenized.png')
+
