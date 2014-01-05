@@ -16,7 +16,7 @@ already_done = []
 submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=10)
 
 for pic in submissions:
-	#get only 
+	#get only
 	url = ''
 	parsed_url = urlparse(vars(pic)['url'])
 	if parsed_url.netloc == 'imgur.com':
@@ -59,12 +59,20 @@ for pic in submissions:
 			original_width = photo['width']
 
 			#hardcoded values for gaben
+			#gaben_roll = -1
+			#gaben_center_x = 47.02
+			#gaben_center_y = 59.28
+			#gaben_size = 51.76
+			#gaben_height = 663
+			#gaben_width = 655
+
+			#hardcoded values for gabenface
 			gaben_roll = -1
-			gaben_center_x = 47.02
-			gaben_center_y = 59.28
-			gaben_size = 51.76
-			gaben_height = 663
-			gaben_width = 655
+			gaben_center_x = 51.24
+			gaben_center_y = 47.53
+			gaben_size = 67.15
+			gaben_height = 465
+			gaben_width = 484
 
 			#calculate values for scale and position
 			scale = (original_size * original_width) / (gaben_size * gaben_width)
@@ -81,7 +89,7 @@ for pic in submissions:
 
 			#open images
 			original = Image.open(cStringIO.StringIO(urllib.urlopen(url).read()))
-			gaben = Image.open('gaben.png')
+			gaben = Image.open('gabenface.png')
 
 			#rotate gaben to match roll
 			gaben = gaben.rotate(int(-1*original_roll))
