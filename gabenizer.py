@@ -5,7 +5,7 @@ import urllib, cStringIO
 from urlparse import urlparse
 from pprint import pprint
 from PIL import Image
-from config import SUBREDDIT, IMGUR_ID, IMGUR_SECRET, SKYBIO_ID, SKYBIO_SECRET
+from config import SUBREDDIT, SKYBIO_ID, SKYBIO_SECRET
 
 r = praw.Reddit('gabenizer bot')
 #r.login()
