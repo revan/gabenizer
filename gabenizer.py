@@ -99,7 +99,12 @@ for pic in submissions:
 
 			gabenized = original.copy()
 			gabenized.paste(gaben, (int(place_x), int(place_y)), gaben)
-			gabenized.save(str(time.time())+'gabenized.png')
+
+			final = Image.new("RGB", (original_width * 2, original_height))
+			final.paste(original, (0,0))
+			final.paste(gabenized, (original_width, 0))
+
+			final.save(str(time.time())+'gabenized.png')
 		except:
 			continue
 
