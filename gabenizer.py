@@ -13,7 +13,7 @@ already_done = []
 
 #while True:
 
-submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=2)
+submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=10)
 
 for pic in submissions:
 	#get only 
@@ -82,12 +82,12 @@ for pic in submissions:
 		continue
 
 	#rotate gaben to match roll
-	gaben = gaben.rotate(int(original_roll - gaben_roll))
+	gaben = gaben.rotate(int(-1*original_roll))
 
 	#resize gaben
 	gaben = gaben.resize((int(scale_width), int(scale_height)))
 
 	gabenized = original.copy()
 	gabenized.paste(gaben, (int(place_x), int(place_y)), gaben)
-	gabenized.save('gabenized.png')
+	gabenized.save(str(time.time())+'gabenized.png')
 
