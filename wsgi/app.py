@@ -12,4 +12,4 @@ def main():
 
 if __name__ == "__main__":
 	app.config['PROPAGATE_EXCEPTIONS'] = True
-    app.run()
+	app.run()
