@@ -5,7 +5,7 @@ app = Flask(__name__)
 @app.route("/")
 def main():
 	try:
-		images=listdir(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'pics'))
+		images=os.listdir(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'pics'))
 		render_template('main.html', images=images)
 	except:
 		return 'An error has occurred.'
