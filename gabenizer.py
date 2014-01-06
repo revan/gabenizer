@@ -98,7 +98,7 @@ for pic in submissions:
 				print place_y
 
 				#open image
-				gaben = Image.open('gabenface.png')
+				gaben = Image.open(os.path.join(os.environ['OPENSHIFT_REPO_DIR'],'gabenface.png'))
 
 				#rotate gaben to match roll
 				gaben = gaben.rotate(int(-1*original_roll))
