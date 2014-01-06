@@ -1,11 +1,10 @@
-<html>
-<head>
-<title>gabenizer</title>
-</head>
-<body>
-{% for image in images %}
-<p>{{image}}</p>
-<img src="{{url_for('static', filename='pics/'+image)}}">
-{% endfor %}
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+	{% for image in images %}
+		<p>{{image}}</p>
+		<img src="{{url_for('static', filename='pics/'+image)}}", class="img-responsive">
+	{% endfor %}
+</div>
+{% end block %}
