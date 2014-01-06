@@ -6,5 +6,5 @@ setup(name='gabenizer',
       author='Revan Sopher',
       author_email='rsopher@gmail.com',
       url='http://www.python.org/sigs/distutils-sig/',
-      install_requires=['Flask>=0.7.2', 'MarkupSafe'],
+      install_requires=['Flask>=0.7.2', 'MarkupSafe', 'praw', 'unirest', 'Pillow'],
      )
