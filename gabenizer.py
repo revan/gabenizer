@@ -2,18 +2,22 @@ import time
 import praw
 import unirest
 import urllib, cStringIO
+import cPickle
+import os
 from urlparse import urlparse
 from pprint import pprint
 from PIL import Image
 from config import SUBREDDIT, SKYBIO_ID, SKYBIO_SECRET
 
-r = praw.Reddit('gabenizer bot')
-#r.login()
+donefile = os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'already_done.p')
 already_done = []
+try:
+	already_done = cPickle.load(open(donefile, 'rb'))
+except:
+	pass
 
-#while True:
-
-submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=10)
+r = praw.Reddit('gabenizer bot')
+submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=3)
 
 for pic in submissions:
 	#get only
@@ -31,12 +35,10 @@ for pic in submissions:
 		url = parsed_url.geturl()
 	print url
 	
-	if url in already_done:
+	if (url in already_done) or (url == ''):
 		continue
 	already_done.append(url)
 	
-	if url == '':
-		continue
 
 	#detect face, get x,y
 	response = unirest.get('http://api.skybiometry.com/fc/faces/detect.json'
@@ -107,7 +109,9 @@ for pic in submissions:
 			final.paste(original, (0,0))
 			final.paste(gabenized, (original_width, 0))
 
-			final.save(str(time.time())+'gabenized.png')
+			final.save(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'pics',str(time.time())+'gabenized.png'))
 		except:
 			continue
+
+cPickle.dump(already_done, open(donefile, 'wb'))
 
