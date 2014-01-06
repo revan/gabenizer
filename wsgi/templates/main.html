@@ -4,7 +4,7 @@
 <div class="container">
 	{% for image in images %}
 		<p>{{image}}</p>
-		<img src="{{url_for('static', filename='pics/'+image)}}", class="img-responsive">
+		<img src="{{url_for('static', filename='pics/'+image)}}">
 	{% endfor %}
 </div>
 {% end block %}
