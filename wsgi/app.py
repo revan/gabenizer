@@ -11,4 +11,5 @@ def main():
 		return 'An error has occurred.'
 
 if __name__ == "__main__":
+	app.config['PROPAGATE_EXCEPTIONS'] = True
     app.run()
