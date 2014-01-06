@@ -10,7 +10,6 @@ His face is scaled and rotated to match the size of the target.
 ![alt text](https://raw.github.com/revansopher/gabenizer/master/demo.png "A demo image")
 
 ##TODO
-
 	-Run on a cycle
 	-Make a webview
 	-If target face is angled too far, don't attempt paste
