@@ -20,7 +20,7 @@ except:
 	pass
 
 r = praw.Reddit('gabenizer bot')
-submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=3)
+submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=5)
 
 for pic in submissions:
 	#get only
