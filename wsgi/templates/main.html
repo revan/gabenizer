@@ -5,6 +5,7 @@
 <body>
 {% for image in images %}
 <p>{{image}}</p>
+<img src="{{url_for('static', filename='pics/{{image}}'}}">
 {% endfor %}
 </body>
 </html>
