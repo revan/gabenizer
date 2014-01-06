@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template
-app = Flask(__name__, template_folder=os.path.join(os.environ['OPENSHIFT_REPO_DIR'],'wsgi','templates')
+app = Flask(__name__, template_folder=os.path.join(os.environ['OPENSHIFT_REPO_DIR'],'wsgi','templates'))
 
 @app.route("/")
 def main():
