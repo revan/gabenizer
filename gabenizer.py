@@ -7,7 +7,10 @@ import os
 from urlparse import urlparse
 from pprint import pprint
 from PIL import Image
-from config import SUBREDDIT, SKYBIO_ID, SKYBIO_SECRET
+#from config import SUBREDDIT, SKYBIO_ID, SKYBIO_SECRET
+SUBREDDIT = os.environ['SUBREDDIT']
+SKYBIO_ID = os.environ['SKYBIO_ID']
+SKYBIO_SECRET = os.environ['SKYBIO_SECRET']
 
 donefile = os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'already_done.p')
 already_done = []
