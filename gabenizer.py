@@ -111,8 +111,11 @@ for pic in submissions:
 			final = Image.new("RGB", (original_width * 2, original_height))
 			final.paste(original, (0,0))
 			final.paste(gabenized, (original_width, 0))
+			filename = str(time.time())+'gabenized.png'
+			final.save(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'pics',filename))
+			final.thumbnail((800, 400))
+			final.save(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'thumbs',filename))
 
-			final.save(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'pics',str(time.time())+'gabenized.png'))
 		except:
 			continue
 

@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def main():
-	images=os.listdir(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'pics'))
+	images=os.listdir(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'thumbs'))
 	print images
 	return render_template('main.html', images=images)
 

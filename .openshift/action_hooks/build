@@ -6,5 +6,8 @@
 if [ ! -d $OPENSHIFT_DATA_DIR/pics ]; then
 	mkdir $OPENSHIFT_DATA_DIR/pics
 fi
+if [ ! -d $OPENSHIFT_DATA_DIR/thumbs]; then
+	mkdir $OPENSHIFT_DATA_DIR/thumbs
+fi
  
 ln -sf $OPENSHIFT_DATA_DIR/pics $OPENSHIFT_REPO_DIR/wsgi/static/pics
