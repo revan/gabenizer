@@ -25,13 +25,15 @@
 			</div>
 
 			<div class="jumbotron">
-				<h3>This is the website for a reddit bot which crawls <a href="www.reddit.com/r/gentlemanboners">/r/gentlemanboners</a> for its top photos, runs them through facial detection, and attempts to replace every face with Gabe Newell's. The bot runs once an hour, and posts images here.</h3>
+				<h3>This is the website for a reddit bot which crawls <a href="http://www.reddit.com/r/gentlemanboners">/r/gentlemanboners</a> for its top photos, runs them through facial detection, and attempts to replace every face with Gabe Newell's. The bot runs once an hour, and posts images here.</h3>
 				<p>gabenizer is still under development. Content on this page is automated and may look absolutely terrible.</p>
 			</div>
 
 			{% for image in images %}
-				<p>{{image}}</p>
-				<img src="{{url_for('static', filename='pics/'+image)}}" class="img-responsive">
+				<a href="{{url_for('static', filename='pics/'+image')}}">
+					<img src="{{url_for('static', filename='pics/'+image)}}" class="img-rounded img-responsive">
+				</a>
+				<p></p>
 			{% endfor %}
 		</div>
 
