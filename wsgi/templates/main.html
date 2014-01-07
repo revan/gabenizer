@@ -30,7 +30,7 @@
 			</div>
 
 			{% for image in images %}
-				<a href="{{url_for('static', filename='pics/'+image')}}">
+				<a href="{{url_for('static', filename='pics/'+image)}}">
 					<img src="{{url_for('static', filename='pics/'+image)}}" class="img-rounded img-responsive">
 				</a>
 				<p></p>
