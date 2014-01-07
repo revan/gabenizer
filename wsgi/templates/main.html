@@ -6,8 +6,8 @@
 	    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
 	</head>
 	<body>
-	<div class="container">
-		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 						<span class="sr-only">Toggle navigation</span>
@@ -23,14 +23,16 @@
 					</ul>
 				</div><!--/.nav-collapse -->
 			</div>
-		</div>
 
-		<h3>This is the website for a reddit bot which crawls <a href="www.reddit.com/r/gentlemanboners">/r/gentlemanboners</a> for its top photos, runs them through facial detection, and attempts to replace every face with Gabe Newell's. The bot runs once an hour, and posts images here.</h3>
-		<h4>gabenizer is still under development. Content on this page is automated and may look absolutely terrible.</h4>
-		{% for image in images %}
-			<p>{{image}}</p>
-			<img src="{{url_for('static', filename='pics/'+image)}}" class="img-responsive">
-		{% endfor %}
+			<div class="jumbotron">
+				<h3>This is the website for a reddit bot which crawls <a href="www.reddit.com/r/gentlemanboners">/r/gentlemanboners</a> for its top photos, runs them through facial detection, and attempts to replace every face with Gabe Newell's. The bot runs once an hour, and posts images here.</h3>
+				<p>gabenizer is still under development. Content on this page is automated and may look absolutely terrible.</p>
+			</div>
+
+			{% for image in images %}
+				<p>{{image}}</p>
+				<img src="{{url_for('static', filename='pics/'+image)}}" class="img-responsive">
+			{% endfor %}
 		</div>
 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
