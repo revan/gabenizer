@@ -11,3 +11,4 @@ if [ ! -d $OPENSHIFT_DATA_DIR/thumbs]; then
 fi
  
 ln -sf $OPENSHIFT_DATA_DIR/pics $OPENSHIFT_REPO_DIR/wsgi/static/pics
+ln -sf $OPENSHIFT_DATA_DIR/thumbs $OPENSHIFT_REPO_DIR/wsgi/static/thumbs
