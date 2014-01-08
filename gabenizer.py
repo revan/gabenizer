@@ -1,16 +1,19 @@
-import time
 import praw
 import unirest
-import urllib, cStringIO
-import cPickle
-import os
+import requests
+import time, urllib, cStringIO, os, cPickle
 from urlparse import urlparse
 from pprint import pprint
 from PIL import Image, ImageStat
-#from config import SUBREDDIT, SKYBIO_ID, SKYBIO_SECRET
+#from config import SUBREDDIT, SKYBIO_ID, SKYBIO_SECRET, REDDIT_USER, REDDIT_PASSWORD, SUBREDDIT_SUBMIT, IMGUR_KEY, IMGUR_DELETE
 SUBREDDIT = os.environ['SUBREDDIT']
 SKYBIO_ID = os.environ['SKYBIO_ID']
 SKYBIO_SECRET = os.environ['SKYBIO_SECRET']
+REDDIT_USER = os.environ['REDDIT_USER']
+REDDIT_PASSWORD = os.environ['REDDIT_PASSWORD']
+SUBREDDIT_SUBMIT = os.environ['SUBREDDIT_SUBMIT']
+IMGUR_KEY = os.environ['IMGUR_KEY']
+IMGUR_DELETE = os.environ['IMGUR_DELETE']
 
 donefile = os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'already_done.p')
 already_done = []
@@ -21,9 +24,10 @@ except:
 
 r = praw.Reddit('gabenizer bot')
 submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=8)
+r.login(REDDIT_USER, REDDIT_PASSWORD)
 
 for pic in submissions:
-	#get only
+	#get only valid images
 	url = ''
 	parsed_url = urlparse(vars(pic)['url'])
 	if parsed_url.netloc == 'imgur.com':
@@ -116,6 +120,22 @@ for pic in submissions:
 			final.save(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'pics',filename))
 			final.thumbnail((800, 400))
 			final.save(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'thumbs',filename))
+
+			#upload to imgur
+			dataupload = {
+				'image' : url_for('static', filename='pics/'+filename),
+				'type' : 'URL',
+				'name' : filename,
+				'title' : vars(pic)['title'],
+				'album' : IMGUR_DELETE
+			}
+			url = 'https://api.imgur.com/3/image'
+			headers = {'Authorization' : 'Client-ID '+IMGUR_KEY}
+			req = requests.post(url, data=dataupload, headers=headers)
+			imgururl = req.json()['data']['link']
+
+			#submit link to reddit
+			r.submit(SUBREDDIT_SUBMIT, vars(pic)['title'], url=imgururl)
 
 		except:
 			continue
