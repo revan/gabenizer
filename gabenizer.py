@@ -1,7 +1,7 @@
 import praw
 import unirest
 import requests
-import time, urllib, cStringIO, os, cPickle
+import time, urllib, cStringIO, os, cPickle, sys
 from urlparse import urlparse
 from pprint import pprint
 from PIL import Image, ImageStat
@@ -133,11 +133,13 @@ for pic in submissions:
 			headers = {'Authorization' : 'Client-ID '+IMGUR_KEY}
 			req = requests.post(url, data=dataupload, headers=headers)
 			imgururl = req.json()['data']['link']
+			print imgururl
 
 			#submit link to reddit
 			r.submit(SUBREDDIT_SUBMIT, vars(pic)['title'], url=imgururl)
 
 		except:
+			print 'Exception: ', sys.exc_info()[0]
 			continue
 
 #save list of processed URLs to disk
