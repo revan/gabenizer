@@ -6,7 +6,7 @@ import cPickle
 import os
 from urlparse import urlparse
 from pprint import pprint
-from PIL import Image
+from PIL import Image, ImageStat
 #from config import SUBREDDIT, SKYBIO_ID, SKYBIO_SECRET
 SUBREDDIT = os.environ['SUBREDDIT']
 SKYBIO_ID = os.environ['SKYBIO_ID']
@@ -20,7 +20,7 @@ except:
 	pass
 
 r = praw.Reddit('gabenizer bot')
-submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=5)
+submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=8)
 
 for pic in submissions:
 	#get only
@@ -68,14 +68,6 @@ for pic in submissions:
 				original_height = photo['height']
 				original_width = photo['width']
 
-				#hardcoded values for gaben
-				#gaben_roll = -1
-				#gaben_center_x = 47.02
-				#gaben_center_y = 59.28
-				#gaben_size = 51.76
-				#gaben_height = 663
-				#gaben_width = 655
-
 				#hardcoded values for gabenface
 				gaben_roll = -1
 				gaben_center_x = 51.24
@@ -108,9 +100,18 @@ for pic in submissions:
 
 				gabenized.paste(gaben, (int(place_x), int(place_y)), gaben)
 
+			#arrange both images
 			final = Image.new("RGB", (original_width * 2, original_height))
 			final.paste(original, (0,0))
 			final.paste(gabenized, (original_width, 0))
+
+			#if original image was grayscale, convert final
+			COLOR_CUTOFF = 100
+			colors = ImageStat.Stat(original).var
+			if len(colors) == 3 and abs(max(v) - min(v))<COLOR_CUTOFF:
+				final = final.convert('L')
+
+			#save image and thumbnail
 			filename = str(time.time())+'gabenized.png'
 			final.save(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'pics',filename))
 			final.thumbnail((800, 400))
@@ -119,5 +120,6 @@ for pic in submissions:
 		except:
 			continue
 
+#save list of processed URLs to disk
 cPickle.dump(already_done, open(donefile, 'wb'))
 
