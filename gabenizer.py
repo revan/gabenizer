@@ -5,7 +5,7 @@ import time, urllib, cStringIO, os, cPickle, sys
 from urlparse import urlparse
 from pprint import pprint
 from PIL import Image, ImageStat
-#from config import SUBREDDIT, SKYBIO_ID, SKYBIO_SECRET, REDDIT_USER, REDDIT_PASSWORD, SUBREDDIT_SUBMIT, IMGUR_KEY, IMGUR_DELETE
+#from config import SUBREDDIT, SKYBIO_ID, SKYBIO_SECRET, REDDIT_USER, REDDIT_PASSWORD, SUBREDDIT_SUBMIT, IMGUR_KEY, IMGUR_DELETE, URL_STATIC
 SUBREDDIT = os.environ['SUBREDDIT']
 SKYBIO_ID = os.environ['SKYBIO_ID']
 SKYBIO_SECRET = os.environ['SKYBIO_SECRET']
@@ -14,6 +14,7 @@ REDDIT_PASSWORD = os.environ['REDDIT_PASSWORD']
 SUBREDDIT_SUBMIT = os.environ['SUBREDDIT_SUBMIT']
 IMGUR_KEY = os.environ['IMGUR_KEY']
 IMGUR_DELETE = os.environ['IMGUR_DELETE']
+URL_STATIC = os.environ['URL_STATIC']
 
 donefile = os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'already_done.p')
 already_done = []
@@ -123,7 +124,7 @@ for pic in submissions:
 
 		#upload to imgur
 		dataupload = {
-			'image' : url_for('static', filename='pics/'+filename),
+			'image' : URL_STATIC+filename,
 			'type' : 'URL',
 			'name' : filename,
 			'title' : vars(pic)['title'],
