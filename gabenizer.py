@@ -112,7 +112,7 @@ for pic in submissions:
 		#if original image was grayscale, convert final
 		COLOR_CUTOFF = 100
 		colors = ImageStat.Stat(original).var
-		if len(colors) == 3 and abs(max(v) - min(v))<COLOR_CUTOFF:
+		if len(colors) == 3 and abs(max(colors) - min(colors))<COLOR_CUTOFF:
 			final = final.convert('L')
 
 		#save image and thumbnail
