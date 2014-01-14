@@ -67,11 +67,17 @@ for pic in submissions:
 		for face in photo['tags']:
 			#get image values
 			original_roll = face['roll']
+			original_yaw = face['yaw']
 			original_center_x = face['center']['x']
 			original_center_y = face['center']['y']
 			original_size = face['width']
 			original_height = photo['height']
 			original_width = photo['width']
+
+			#if yaw is too great, skip
+			MAX_YAW = 40
+			if abs(original_yaw) > MAX_YAW:
+				continue
 
 			#hardcoded values for gabenface
 			gaben_roll = -1
@@ -104,6 +110,9 @@ for pic in submissions:
 			gaben = gaben.resize((int(scale_width), int(scale_height)))
 
 			gabenized.paste(gaben, (int(place_x), int(place_y)), gaben)
+			unprocessed = 0
+		if unprocessed:
+			continue
 
 		#arrange both images
 		final = Image.new("RGB", (original_width * 2, original_height))
