@@ -64,6 +64,7 @@ for pic in submissions:
 		gabenized = original.copy()
 		if not photo['tags']:
 			continue
+		unprocessed = 1
 		for face in photo['tags']:
 			#get image values
 			original_roll = face['roll']
