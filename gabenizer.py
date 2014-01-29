@@ -59,7 +59,7 @@ for pic in submissions:
 
 	photos = response.body['photos']
 	for photo in photos:
-		#try:
+		try:
 		original = Image.open(cStringIO.StringIO(urllib.urlopen(url).read()))
 		gabenized = original.copy()
 		if not photo['tags']:
