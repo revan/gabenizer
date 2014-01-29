@@ -24,7 +24,7 @@ except:
 	pass
 
 r = praw.Reddit('gabenizer bot')
-submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=8)
+submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=5)
 r.login(REDDIT_USER, REDDIT_PASSWORD)
 
 for pic in submissions:
@@ -76,7 +76,7 @@ for pic in submissions:
 			original_width = photo['width']
 
 			#if yaw is too great, skip
-			MAX_YAW = 40
+			MAX_YAW = 30
 			if abs(original_yaw) > MAX_YAW:
 				continue
 
@@ -149,9 +149,9 @@ for pic in submissions:
 		#submit link to reddit
 		r.submit(SUBREDDIT_SUBMIT, vars(pic)['title'], url=imgururl)
 
-		#except:
-		#	print 'Exception: ', sys.exc_info()[0]
-		#	continue
+		except:
+			print 'Exception: ', sys.exc_info()[0]
+			continue
 
 #save list of processed URLs to disk
 cPickle.dump(already_done, open(donefile, 'wb'))
