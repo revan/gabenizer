@@ -60,94 +60,94 @@ for pic in submissions:
 	photos = response.body['photos']
 	for photo in photos:
 		try:
-		original = Image.open(cStringIO.StringIO(urllib.urlopen(url).read()))
-		gabenized = original.copy()
-		if not photo['tags']:
-			continue
-		unprocessed = 1
-		for face in photo['tags']:
-			#get image values
-			original_roll = face['roll']
-			original_yaw = face['yaw']
-			original_center_x = face['center']['x']
-			original_center_y = face['center']['y']
-			original_size = face['width']
-			original_height = photo['height']
-			original_width = photo['width']
+			original = Image.open(cStringIO.StringIO(urllib.urlopen(url).read()))
+			gabenized = original.copy()
+			if not photo['tags']:
+				continue
+			unprocessed = 1
+			for face in photo['tags']:
+				#get image values
+				original_roll = face['roll']
+				original_yaw = face['yaw']
+				original_center_x = face['center']['x']
+				original_center_y = face['center']['y']
+				original_size = face['width']
+				original_height = photo['height']
+				original_width = photo['width']
 
-			#if yaw is too great, skip
-			MAX_YAW = 30
-			if abs(original_yaw) > MAX_YAW:
+				#if yaw is too great, skip
+				MAX_YAW = 30
+				if abs(original_yaw) > MAX_YAW:
+					continue
+
+				#hardcoded values for gabenface
+				gaben_roll = -1
+				gaben_center_x = 51.24
+				gaben_center_y = 47.53
+				gaben_size = 67.15
+				gaben_height = 465
+				gaben_width = 484
+
+				#calculate values for scale and position
+				scale = (original_size * original_width) / (gaben_size * gaben_width)
+				scale_height = gaben_height * scale
+				scale_width = gaben_width * scale
+				place_x = (0.01 * original_center_x * original_width) - (0.01 * gaben_center_x * scale_width)
+				place_y = (0.01 * original_center_y * original_height) - (0.01 * gaben_center_y * scale_height)
+
+				print scale
+				print scale_height
+				print scale_width
+				print place_x
+				print place_y
+
+				#open image
+				gaben = Image.open(os.path.join(os.environ['OPENSHIFT_REPO_DIR'],'gabenface.png'))
+
+				#rotate gaben to match roll
+				gaben = gaben.rotate(int(-1*original_roll))
+
+				#resize gaben
+				gaben = gaben.resize((int(scale_width), int(scale_height)))
+
+				gabenized.paste(gaben, (int(place_x), int(place_y)), gaben)
+				unprocessed = 0
+			if unprocessed:
 				continue
 
-			#hardcoded values for gabenface
-			gaben_roll = -1
-			gaben_center_x = 51.24
-			gaben_center_y = 47.53
-			gaben_size = 67.15
-			gaben_height = 465
-			gaben_width = 484
+			#arrange both images
+			final = Image.new("RGB", (original_width * 2, original_height))
+			final.paste(original, (0,0))
+			final.paste(gabenized, (original_width, 0))
 
-			#calculate values for scale and position
-			scale = (original_size * original_width) / (gaben_size * gaben_width)
-			scale_height = gaben_height * scale
-			scale_width = gaben_width * scale
-			place_x = (0.01 * original_center_x * original_width) - (0.01 * gaben_center_x * scale_width)
-			place_y = (0.01 * original_center_y * original_height) - (0.01 * gaben_center_y * scale_height)
+			#if original image was grayscale, convert final
+			COLOR_CUTOFF = 100
+			colors = ImageStat.Stat(original).var
+			if len(colors) == 3 and abs(max(colors) - min(colors))<COLOR_CUTOFF:
+				final = final.convert('L')
 
-			print scale
-			print scale_height
-			print scale_width
-			print place_x
-			print place_y
+			#save image and thumbnail
+			filename = str(time.time())+'gabenized.png'
+			final.save(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'pics',filename))
+			final.thumbnail((800, 400))
+			final.save(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'thumbs',filename))
 
-			#open image
-			gaben = Image.open(os.path.join(os.environ['OPENSHIFT_REPO_DIR'],'gabenface.png'))
+			#upload to imgur
+			dataupload = {
+				'image' : URL_STATIC+filename,
+				'type' : 'URL',
+				'name' : filename,
+				'title' : vars(pic)['title'],
+				'album' : IMGUR_DELETE
+			}
+			url = 'https://api.imgur.com/3/image'
+			headers = {'Authorization' : 'Client-ID '+IMGUR_KEY}
+			req = requests.post(url, data=dataupload, headers=headers)
+			imgururl = req.json()['data']['link']
+			print imgururl
 
-			#rotate gaben to match roll
-			gaben = gaben.rotate(int(-1*original_roll))
-
-			#resize gaben
-			gaben = gaben.resize((int(scale_width), int(scale_height)))
-
-			gabenized.paste(gaben, (int(place_x), int(place_y)), gaben)
-			unprocessed = 0
-		if unprocessed:
-			continue
-
-		#arrange both images
-		final = Image.new("RGB", (original_width * 2, original_height))
-		final.paste(original, (0,0))
-		final.paste(gabenized, (original_width, 0))
-
-		#if original image was grayscale, convert final
-		COLOR_CUTOFF = 100
-		colors = ImageStat.Stat(original).var
-		if len(colors) == 3 and abs(max(colors) - min(colors))<COLOR_CUTOFF:
-			final = final.convert('L')
-
-		#save image and thumbnail
-		filename = str(time.time())+'gabenized.png'
-		final.save(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'pics',filename))
-		final.thumbnail((800, 400))
-		final.save(os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'thumbs',filename))
-
-		#upload to imgur
-		dataupload = {
-			'image' : URL_STATIC+filename,
-			'type' : 'URL',
-			'name' : filename,
-			'title' : vars(pic)['title'],
-			'album' : IMGUR_DELETE
-		}
-		url = 'https://api.imgur.com/3/image'
-		headers = {'Authorization' : 'Client-ID '+IMGUR_KEY}
-		req = requests.post(url, data=dataupload, headers=headers)
-		imgururl = req.json()['data']['link']
-		print imgururl
-
-		#submit link to reddit
-		r.submit(SUBREDDIT_SUBMIT, vars(pic)['title'], url=imgururl)
+			#submit link to reddit
+			r.submit(SUBREDDIT_SUBMIT, vars(pic)['title'], url=imgururl)
 
 		except:
 			print 'Exception: ', sys.exc_info()[0]
