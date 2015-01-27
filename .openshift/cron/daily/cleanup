@@ -1,4 +1,3 @@
 #!/bin/bash
 rm -f ${OPENSHIFT_DATA_DIR}/pics/*
-rm -f ${OPENSHIFT_DATA_DIR}/thumbs/*
 
