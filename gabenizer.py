@@ -97,16 +97,16 @@ def process_image(url, gaben_path):
         return final
 
 
-def imgur_upload(final, filepath, filename, title):
+def imgur_upload(final, filepath, filename, title, URL_STATIC):
     """ Uploads a locally hosted image to imgur.
         TODO: upload the file directly. """
     # save image
-    fullpath = os.join(filepath, filename)
+    fullpath = os.path.join(filepath, filename)
     final.save(fullpath)
 
     # upload to imgur
     dataupload = {
-        'image': fullpath,
+        'image': URL_STATIC + filename,
         'type': 'URL',
         'name': filename,
         'title': title,

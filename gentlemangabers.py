@@ -5,6 +5,7 @@ import time
 import os
 import cPickle
 import sys
+import traceback
 
 from urlparse import urlparse
 from pprint import pprint
@@ -53,13 +54,13 @@ for pic in submissions:
         image = gabenizer.process_image(url, os.path.join(os.environ['OPENSHIFT_REPO_DIR'], 'gabenface.png'))
         title = vars(pic)['title']
         filename = str(time.time())+'gabenized.png'
-        imgururl = gabenizer.imgur_upload(image, os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'pics'), filename, title)
+        imgururl = gabenizer.imgur_upload(image, os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'pics'), filename, title, URL_STATIC)
 
         # submit link to reddit
         r.submit(SUBREDDIT_SUBMIT, title, url=imgururl)
 
     except:
-        print 'Exception: ', sys.exc_info()[0]
+        traceback.print_exc()
         continue
 
 # save list of processed URLs to disk
