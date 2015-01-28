@@ -57,7 +57,9 @@ for pic in submissions:
         imgururl = gabenizer.imgur_upload(image, os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'pics'), filename, title, URL_STATIC)
 
         # submit link to reddit
-        r.submit(SUBREDDIT_SUBMIT, title, url=imgururl)
+        submission = r.submit(SUBREDDIT_SUBMIT, title, url=imgururl)
+
+        submission.add_comment('[Source](' + vars(pic)['permalink'] + ')')
 
     except:
         traceback.print_exc()

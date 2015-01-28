@@ -15,4 +15,10 @@ See it in action [here!](http://www.reddit.com/r/gentlemangabers)
 ##TODO
 
 	-If skintones don't match, apply color filter
+    -Direct upload to imgur instead of by URL
 
+Notes for running: this project is designed to run on [OpenShift](openshift.redhat.com).
+`ssh` into the deployed instance to set the environment variables for API keys and reddit account.
+
+If using a new reddit account, the spam filters will lock out your bot.
+Manually post and upvote some material until it stops prompting for CAPTCHAs on every post.
