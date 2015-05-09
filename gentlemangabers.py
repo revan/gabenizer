@@ -29,7 +29,7 @@ try:
 except:
     pass
 
-r = praw.Reddit('gabenizer bot')
+r = praw.Reddit('gabenizer')
 submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=5)
 r.login(REDDIT_USER, REDDIT_PASSWORD)
 

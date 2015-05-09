@@ -25,7 +25,7 @@ try:
 except:
     pass
 
-r = praw.Reddit('gabenizer bot')
+r = praw.Reddit('gabenizer')
 r.login(REDDIT_USER, REDDIT_PASSWORD)
 
 mentions = r.get_mentions()
