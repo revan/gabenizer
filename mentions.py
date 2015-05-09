@@ -35,12 +35,10 @@ def reply_failure(mention):
 
 for mention in mentions:
     if mention.submission.url in already_done:
-        reply_failure(mention)
         continue
     already_done.add(mention.submission.url)
 
     if not KEY_PHRASE in mention.body.lower():
-        reply_failure(mention)
         continue
 
     # get only valid images
