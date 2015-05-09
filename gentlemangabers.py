@@ -1,8 +1,8 @@
 #!/bin/python2
 # The script that handles all reddit interactions.
 import praw
-from praw.handlers import MultiprocessHandler
-handler = MultiprocessHandler()
+#from praw.handlers import MultiprocessHandler
+#handler = MultiprocessHandler()
 
 import time
 import os
@@ -29,7 +29,7 @@ try:
 except:
     pass
 
-r = praw.Reddit('gabenizer bot', handler=handler)
+r = praw.Reddit('gabenizer bot')
 submissions = r.get_subreddit(SUBREDDIT).get_hot(limit=5)
 r.login(REDDIT_USER, REDDIT_PASSWORD)
 

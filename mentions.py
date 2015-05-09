@@ -1,8 +1,6 @@
 #!/bin/python2
 # Script that replies to username mentions.
 import praw
-from praw.handlers import MultiprocessHandler
-handler = MultiprocessHandler()
 
 import time
 import os
@@ -29,7 +27,7 @@ try:
 except:
     pass
 
-r = praw.Reddit('gabenizer bot', handler=handler)
+r = praw.Reddit('gabenizer bot')
 r.login(REDDIT_USER, REDDIT_PASSWORD)
 
 mentions = r.get_mentions()
