@@ -9,8 +9,6 @@ import sys
 import traceback
 
 from urlparse import urlparse
-from pprint import pprint
-from PIL import Image, ImageStat
 
 import gabenizer
 
@@ -32,12 +30,17 @@ r.login(REDDIT_USER, REDDIT_PASSWORD)
 
 mentions = r.get_mentions()
 
+def reply_failure(mention):
+    mention.reply("Couldn't find any faces.\n\n***\n\n[More?](http://www.reddit.com/r/gentlemangabers) I am a bot. [Github!](https://github.com/revan/gabenizer)")
+
 for mention in mentions:
     if mention.submission.url in already_done:
+        reply_failure(mention)
         continue
     already_done.add(mention.submission.url)
 
     if not KEY_PHRASE in mention.body.lower():
+        reply_failure(mention)
         continue
 
     # get only valid images
@@ -47,6 +50,7 @@ for mention in mentions:
         # is album or framed page
         if parsed_url.path.split('/')[1]=='a':
             # is album, skip
+            reply_failure(mention)
             continue
         else:
             url = parsed_url.geturl()+'.jpg'
@@ -56,6 +60,7 @@ for mention in mentions:
     print url
 
     if url == '':
+        reply_failure(mention)
         continue
 
     try:
@@ -68,6 +73,7 @@ for mention in mentions:
 
     except:
         traceback.print_exc()
+        reply_failure(mention)
         continue
 
 # save list of processed URLs to disk
