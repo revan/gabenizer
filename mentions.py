@@ -61,10 +61,10 @@ for mention in mentions:
     try:
         image = gabenizer.process_image(url, os.path.join(os.environ['OPENSHIFT_REPO_DIR'], 'gabenface.png'))
         filename = str(time.time())+'gabenized.png'
-        imgururl = gabenizer.imgur_upload(image, os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'pics'), filename, title, URL_STATIC)
+        imgururl = gabenizer.imgur_upload(image, os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'pics'), filename, 'gabenizer comment', URL_STATIC)
 
         # comment link
-        mention.submission.add_comment("[Praise be Gaben.](%s)\n\n***\n\nI am a bot. [More?](www.reddit.com/r/gentlemangabers) [Github](https://github.com/revan/gabenizer)" % imgururl)
+        mention.submission.add_comment("[Praise be Gaben.](%s)\n\n***\n\n[More?](http://www.reddit.com/r/gentlemangabers) I am a bot. [Github](https://github.com/revan/gabenizer)" % imgururl)
 
     except:
         traceback.print_exc()
