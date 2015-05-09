@@ -64,7 +64,7 @@ for mention in mentions:
         imgururl = gabenizer.imgur_upload(image, os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'pics'), filename, 'gabenizer comment', URL_STATIC)
 
         # comment link
-        mention.submission.add_comment("[Praise be Gaben.](%s)\n\n***\n\n[More?](http://www.reddit.com/r/gentlemangabers) I am a bot. [Github](https://github.com/revan/gabenizer)" % imgururl)
+        mention.reply("[Praise be Gaben.](%s)\n\n***\n\n[More?](http://www.reddit.com/r/gentlemangabers) I am a bot. [Github!](https://github.com/revan/gabenizer)" % imgururl)
 
     except:
         traceback.print_exc()
