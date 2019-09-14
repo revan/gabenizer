@@ -1,18 +1,13 @@
-#!/bin/python2
+#!/bin/python3
 # The script that handles all reddit interactions.
 import praw
-#from praw.handlers import MultiprocessHandler
-#handler = MultiprocessHandler()
 
 import time
 import os
-import cPickle
-import sys
+import pickle
 import traceback
 
-from urlparse import urlparse
-from pprint import pprint
-from PIL import Image, ImageStat
+from urllib import parse
 
 import gabenizer
 
@@ -25,7 +20,7 @@ URL_STATIC = os.environ['URL_STATIC']
 donefile = os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'already_done.p')
 already_done = []
 try:
-    already_done = cPickle.load(open(donefile, 'rb'))
+    already_done = pickle.load(open(donefile, 'rb'))
 except:
     pass
 
@@ -36,7 +31,7 @@ r.login(REDDIT_USER, REDDIT_PASSWORD)
 for pic in submissions:
     # get only valid images
     url = ''
-    parsed_url = urlparse(vars(pic)['url'])
+    parsed_url = parse.urlparse(vars(pic)['url'])
     if parsed_url.netloc == 'imgur.com':
         # is album or framed page
         if parsed_url.path.split('/')[1]=='a':
@@ -47,7 +42,7 @@ for pic in submissions:
     elif parsed_url.netloc == 'i.imgur.com':
         # is image file
         url = parsed_url.geturl()
-    print url
+    print(url)
 
     if (url in already_done) or (url == ''):
         continue
@@ -69,4 +64,4 @@ for pic in submissions:
         continue
 
 # save list of processed URLs to disk
-cPickle.dump(already_done, open(donefile, 'wb'))
+pickle.dump(already_done, open(donefile, 'wb'))

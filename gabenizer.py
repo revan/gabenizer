@@ -1,9 +1,8 @@
-#!/bin/python2
-import unirest
+#!/bin/python3
 import requests
 import time
 import urllib
-import cStringIO
+from io import StringIO
 import os
 from pprint import pprint
 from PIL import Image, ImageStat
@@ -18,7 +17,7 @@ def process_image(url, gaben_path):
     """ The core of the application. Takes a URL, returns a processed image. """
 
     # detect face, get x,y
-    response = unirest.get('http://api.skybiometry.com/fc/faces/detect.json'
+    response = requests.get('http://api.skybiometry.com/fc/faces/detect.json'
         + '?api_key='+SKYBIO_ID
         + '&api_secret='+SKYBIO_SECRET
         + '&detector=aggressive'
@@ -26,9 +25,9 @@ def process_image(url, gaben_path):
         + '&urls='+url)
     pprint(vars(response))
 
-    photos = response.body['photos']
+    photos = response.json()['photos']
     for photo in photos:
-        original = Image.open(cStringIO.StringIO(urllib.urlopen(url).read()))
+        original = Image.open(StringIO(urllib.urlopen(url).read()))
         gabenized = original.copy()
         if not photo['tags']:
             continue
@@ -63,11 +62,11 @@ def process_image(url, gaben_path):
             place_x = (0.01 * original_center_x * original_width) - (0.01 * gaben_center_x * scale_width)
             place_y = (0.01 * original_center_y * original_height) - (0.01 * gaben_center_y * scale_height)
 
-            print scale
-            print scale_height
-            print scale_width
-            print place_x
-            print place_y
+            print(scale)
+            print(scale_height)
+            print(scale_width)
+            print(place_x)
+            print(place_y)
 
             # open image
             gaben = Image.open(gaben_path)
@@ -116,7 +115,7 @@ def imgur_upload(final, filepath, filename, title, URL_STATIC):
     headers = {'Authorization': 'Client-ID ' + IMGUR_KEY}
     req = requests.post(url, data=dataupload, headers=headers)
     imgururl = req.json()['data']['link']
-    print imgururl
+    print(imgururl)
 
     return imgururl
 
