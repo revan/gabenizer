@@ -1,6 +1,0 @@
-#!/bin/bash
-
-iminute=$(date +%M)
-if [ $(($iminute % 10)) -eq 0 ]; then
-	python ${OPENSHIFT_REPO_DIR}/mentions.py
-fi
