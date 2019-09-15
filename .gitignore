@@ -3,6 +3,5 @@
 *.pyo
 *~
 config.py
-*.png
 venv
 .idea
