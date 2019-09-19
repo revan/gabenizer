@@ -1,4 +1,7 @@
-#gabenizer bot
+# gabenizer bot
+
+[![Build Status](https://travis-ci.org/revan/gabenizer.svg?branch=master)](https://travis-ci.org/revan/gabenizer)
+
 This is a reddit bot which crawls a specified subreddit for its top photos, runs them through
 [facial detection](http://skybiometry.com/), and attempts to replace every face with
 [Gabe Newell's](http://en.wikipedia.org/wiki/Gabe_Newell).
