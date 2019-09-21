@@ -13,7 +13,11 @@ Face = collections.namedtuple(
     'Face',
     ('roll', 'yaw', 'vertices', 'left_eye', 'right_eye',  'mouth_left', 'mouth_right'))
 
-Coordinate = collections.namedtuple('Coordinate', ('x', 'y', 'z'))
+
+class Coordinate(collections.namedtuple('Coordinate', ('x', 'y', 'z'))):
+
+    def xy(self):
+        return self.x, self.y
 
 # Google Vision APIs return strings instead of confidences.
 LIKELIHOODS = {v: i for i, v in enumerate(

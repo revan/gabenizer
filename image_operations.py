@@ -3,6 +3,7 @@
 import os
 from typing import List
 
+import numpy as np
 from PIL import Image, ImageStat
 import face_detect
 
@@ -57,6 +58,29 @@ def _paste_donor_on_recipient(
         donor_face: face_detect.Face,
         donor_image: Image):
 
-    # TODO: rewrite with like, math and stuff
-    return recipient_image
+    get_coords = lambda face: [c.xy() for c in [face.left_eye, face.right_eye, face.mouth_left, face.mouth_right]]
+    donor_coords = get_coords(donor_face)
+    recipient_coords = get_coords(recipient_face)
+    coefficients = _find_coeffs(recipient_coords, donor_coords)
 
+    warped_donor = donor_image.transform(
+        recipient_image.size, Image.PERSPECTIVE, coefficients, Image.BICUBIC)
+
+    working_recipient = recipient_image.copy()
+    working_recipient.paste(warped_donor, (0, 0), warped_donor)
+
+    return working_recipient
+
+
+# Adapted from https://stackoverflow.com/questions/14177744/how-does-perspective-transformation-work-in-pil.
+def _find_coeffs(pa, pb):
+    matrix = []
+    for p1, p2 in zip(pa, pb):
+        matrix.append([p1[0], p1[1], 1, 0, 0, 0, -p2[0]*p1[0], -p2[0]*p1[1]])
+        matrix.append([0, 0, 0, p1[0], p1[1], 1, -p2[1]*p1[0], -p2[1]*p1[1]])
+
+    A = np.array(matrix, dtype=np.float)
+    B = np.array(pb).reshape(8)
+
+    res = np.dot(np.linalg.inv(A.T @ A) @ A.T, B)
+    return np.array(res).reshape(8)
