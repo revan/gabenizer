@@ -13,8 +13,6 @@ IMAGE_DESCRIPTION = 'https://reddit.com/r/gentlemangabers'
 
 def upload_image(final: Image, title: str) -> str:
     """ Uploads an Image to imgur."""
-    assert IMGUR_KEY
-
     final_bytes = _image_to_base64(image=final)
     result = _make_upload_call(encoded=final_bytes, title=title, description=IMAGE_DESCRIPTION)
 
@@ -28,6 +26,8 @@ def _image_to_base64(image: Image) -> base64.bytes_types:
 
 
 def _make_upload_call(encoded: base64.bytes_types, title: str, description: str) -> Dict:
+    assert IMGUR_KEY
+
     dataupload = {
         'image': encoded,
         'type': 'base64',
