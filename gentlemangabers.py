@@ -10,12 +10,12 @@ import traceback
 from urllib import parse
 
 import gabenizer
+import image_uploader
 
 SUBREDDIT = os.environ['SUBREDDIT']
 SUBREDDIT_SUBMIT = os.environ['SUBREDDIT_SUBMIT']
 REDDIT_USER = os.environ['REDDIT_USER']
 REDDIT_PASSWORD = os.environ['REDDIT_PASSWORD']
-URL_STATIC = os.environ['URL_STATIC']
 
 donefile = os.path.join(os.environ['OPENSHIFT_DATA_DIR'],'already_done.p')
 already_done = []
@@ -52,7 +52,7 @@ for pic in submissions:
         image = gabenizer.process_image(url, os.path.join(os.environ['OPENSHIFT_REPO_DIR'], 'gabenface.png'))
         title = vars(pic)['title']
         filename = str(time.time())+'gabenized.png'
-        imgururl = gabenizer.imgur_upload(image, os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'pics'), filename, title, URL_STATIC)
+        imgururl = image_uploader.upload_image(image, title)
 
         # submit link to reddit
         submission = r.submit(SUBREDDIT_SUBMIT, title, url=imgururl)

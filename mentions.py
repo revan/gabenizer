@@ -5,12 +5,12 @@ import praw
 import time
 import os
 import cPickle
-import sys
 import traceback
 
 from urlparse import urlparse
 
 import gabenizer
+import image_uploader
 
 KEY_PHRASE = 'have at you'
 
@@ -55,7 +55,6 @@ for mention in mentions:
     elif parsed_url.netloc == 'i.imgur.com':
         # is image file
         url = parsed_url.geturl()
-    print url
 
     if url == '':
         reply_failure(mention)
@@ -64,7 +63,7 @@ for mention in mentions:
     try:
         image = gabenizer.process_image(url, os.path.join(os.environ['OPENSHIFT_REPO_DIR'], 'gabenface.png'))
         filename = str(time.time())+'gabenized.png'
-        imgururl = gabenizer.imgur_upload(image, os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'pics'), filename, 'gabenizer comment', URL_STATIC)
+        imgururl = image_uploader.upload_image(image, 'gabenizer comment')
 
         # comment link
         mention.reply("[Praise be Gaben.](%s)\n\n***\n\n[More?](http://www.reddit.com/r/gentlemangabers) I am a bot. [Github!](https://github.com/revan/gabenizer)" % imgururl)
