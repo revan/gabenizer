@@ -61,5 +61,17 @@ class SubredditFetcherTest(unittest.TestCase):
         )
 
 
+class LinkSubmitterTest(unittest.TestCase):
+
+    def setUp(self):
+        api_module.use_mocks = True
+
+    def test_format_comment(self):
+        self.assertEqual(
+            reddit.LinkSubmitter._format_comment('sourceurl'),
+            '[Source](sourceurl)',
+        )
+
+
 if __name__ == '__main__':
     unittest.main()

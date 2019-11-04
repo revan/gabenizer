@@ -102,3 +102,27 @@ class SubredditFetcher(api_module.ApiModule):
 
     def mocked_call(self, subreddit: str, limit: int, fetch_type: str = 'hot') -> List[Post]:
         return [Post(title='Fake %d' % i, url='https://i.imgur.com/ZClFAdK.jpg') for i in range(limit)]
+
+
+class LinkSubmitter(api_module.ApiModule):
+
+    def post_link(self, url: str, title: str, source: str, subreddit: str = OUR_SUBREDDIT) -> None:
+        self.call(url=url, title=title, comment=LinkSubmitter._format_comment(source=source), subreddit=subreddit)
+
+    @staticmethod
+    def _format_comment(source: str) -> str:
+        return '[Source](%s)' % source
+
+    def call(self, url: str, title: str, comment: str, subreddit: str) -> None:
+        r = reddit()
+
+        # TODO: use submit_image in place of image_uploader module
+        submission = r.subreddit(subreddit).submit(
+            title=title,
+            url=url,
+        )
+
+        submission.reply(comment)
+
+    def mocked_call(self, url: str, title: str, comment: str, subreddit: str) -> None:
+        pass
