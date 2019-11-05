@@ -63,8 +63,8 @@ class SubredditFetcher(api_module.ApiModule):
             self,
             target_subreddit: str = TARGET_SUBREDDIT,
             our_subreddit: str = OUR_SUBREDDIT,
-            limit_target: int = 5,
-            limit_ours: int = 50,
+            limit_target: int = 10,
+            limit_ours: int = 100,
     ) -> List[Post]:
         # Hack: to avoid duplicates, we filter out any posts with the same title as our subreddit's recent posts.
         # This only works because we don't change the post titles, and because since we have a single source subreddit,
@@ -114,10 +114,8 @@ class LinkSubmitter(api_module.ApiModule):
         return '[Source](%s)' % source
 
     def call(self, url: str, title: str, comment: str, subreddit: str) -> None:
-        r = reddit()
-
         # TODO: use submit_image in place of image_uploader module
-        submission = r.subreddit(subreddit).submit(
+        submission = reddit().subreddit(subreddit).submit(
             title=title,
             url=url,
         )

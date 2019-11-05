@@ -31,7 +31,7 @@ def create_before_and_after(
         recipient_faces: List[face_detect.Face],
         recipient_image: Image,
         donor_face: face_detect.Face = GABEN_FACE,
-        donor_image: Image = GABEN_IMAGE):
+        donor_image: Image = GABEN_IMAGE) -> Image:
 
     after_image = recipient_image
 
@@ -56,7 +56,7 @@ def _paste_donor_on_recipient(
         recipient_face: face_detect.Face,
         recipient_image: Image,
         donor_face: face_detect.Face,
-        donor_image: Image):
+        donor_image: Image) -> Image:
 
     get_coords = lambda face: [c.xy() for c in [face.left_eye, face.right_eye, face.mouth_left, face.mouth_right]]
     donor_coords = get_coords(donor_face)

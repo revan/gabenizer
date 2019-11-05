@@ -14,8 +14,6 @@ class ApiModule(abc.ABC):
         original_mocked_call_sig = dict(inspect.signature(ApiModule.mocked_call).parameters)
         del original_mocked_call_sig['self']
 
-        print(mocked_call_sig, original_mocked_call_sig)
-
         if original_mocked_call_sig != mocked_call_sig:
             # We've overridden mocked_call()
             assert mocked_call_sig == inspect.signature(self.call).parameters

@@ -25,7 +25,8 @@ class ImageUploader(api_module.ApiModule):
     @staticmethod
     def _image_to_base64(image: Image) -> base64.bytes_types:
         bytes_buffer = io.BytesIO()
-        image.save(bytes_buffer, format='PNG')
+        image.save(bytes_buffer, format='JPEG')
+        # TODO: check image size against imgur limits? Too large files will be rejected.
         return base64.b64encode(bytes_buffer.getvalue())
 
 
@@ -42,8 +43,6 @@ class ImageUploader(api_module.ApiModule):
         headers = {'Authorization': 'Client-ID %s' % IMGUR_KEY}
         req = requests.post(url, data=dataupload, headers=headers)
         req.raise_for_status()
-
-        print(req.json())
 
         return req.json()
 
