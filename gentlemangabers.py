@@ -19,7 +19,7 @@ def main():
                 title=post.title,
                 source=post.url,
             )
-        except:
+        except Exception:
             logging.exception('Error while processing %s:' % post.url)
 
 
