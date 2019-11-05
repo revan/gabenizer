@@ -1,4 +1,5 @@
 """Module handling contact with Reddit APIs."""
+import logging
 import os
 from typing import List, Optional
 
@@ -80,6 +81,7 @@ class SubredditFetcher(api_module.ApiModule):
             if post.url and post.title not in our_recent_title_set:
                 unprocessed_posts.append(post)
 
+        logging.info('Got unprocessed posts: %r', unprocessed_posts)
         return unprocessed_posts
 
     @staticmethod
@@ -114,12 +116,14 @@ class LinkSubmitter(api_module.ApiModule):
         return '[Source](%s)' % source
 
     def call(self, url: str, title: str, comment: str, subreddit: str) -> None:
+        logging.info('Posting submission for %s.', url)
         # TODO: use submit_image in place of image_uploader module
         submission = reddit().subreddit(subreddit).submit(
             title=title,
             url=url,
         )
 
+        logging.info('Posting comment %s.', comment)
         submission.reply(comment)
 
     def mocked_call(self, url: str, title: str, comment: str, subreddit: str) -> None:

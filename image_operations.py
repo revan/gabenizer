@@ -1,5 +1,6 @@
 """Functions for modifying images."""
 
+import logging
 import os
 from typing import List
 
@@ -32,6 +33,7 @@ def create_before_and_after(
         recipient_image: Image,
         donor_face: face_detect.Face = GABEN_FACE,
         donor_image: Image = GABEN_IMAGE) -> Image:
+    logging.info('Locally processing image.')
 
     after_image = recipient_image
 

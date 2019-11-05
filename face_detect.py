@@ -1,6 +1,7 @@
 """Module handling contact with facial recognition APIs."""
 
 import collections
+import logging
 import os
 from typing import Dict
 import requests
@@ -31,6 +32,8 @@ def likelihood_at_least(value: str, threshold: str):
 class FaceDetect(api_module.ApiModule):
 
     def run_face_detect(self, url: str):
+        logging.info('Querying Vision API for %s', url)
+
         face_json = self.call(url)['responses'][0]
 
         xyz_to_coord = lambda p: Coordinate(p['x'], p['y'], p['z'])
