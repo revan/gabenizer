@@ -67,9 +67,8 @@ class FaceDetect(api_module.ApiModule):
         }
 
         response = requests.post(
-            'https://vision.googleapis.com/v1/images:annotate',
+            'https://vision.googleapis.com/v1/images:annotate?key=%s' % CLOUD_KEY,
             json=payload,
-            headers={'Authorization': 'Bearer %s' % CLOUD_KEY}
         )
         response.raise_for_status()
 
