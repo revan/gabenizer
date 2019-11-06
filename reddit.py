@@ -24,6 +24,7 @@ OUR_SUBREDDIT = 'gentlemangabers'
 class Post:
     title: str
     url: str
+    permalink: str
 
     @staticmethod
     def from_submission(submission: praw.reddit.models.Submission):
@@ -31,6 +32,7 @@ class Post:
         return Post(
             title=submission.title,
             url=submission.url,
+            permalink=submission.permalink
         )
 
 
@@ -103,7 +105,10 @@ class SubredditFetcher(api_module.ApiModule):
             raise NotImplementedError('unknown value for fetch_type: %s' % fetch_type)
 
     def mocked_call(self, subreddit: str, limit: int, fetch_type: str = 'hot') -> List[Post]:
-        return [Post(title='Fake %d' % i, url='https://i.imgur.com/ZClFAdK.jpg') for i in range(limit)]
+        return [
+            Post(title='Fake %d' % i, url='https://i.imgur.com/ZClFAdK.jpg',
+                 permalink='https://www.reddit.com/fakepermalink')
+            for i in range(limit)]
 
 
 class LinkSubmitter(api_module.ApiModule):

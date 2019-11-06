@@ -17,7 +17,7 @@ def main():
             submitter.post_link(
                 url=uploaded_url,
                 title=post.title,
-                source=post.url,
+                source=post.permalink,
             )
         except Exception:
             logging.exception('Error while processing %s:' % post.url)
