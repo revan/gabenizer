@@ -29,12 +29,12 @@ def likelihood_at_least(value: str, threshold: str):
     return LIKELIHOODS[value] >= LIKELIHOODS[threshold]
 
 
-class FaceDetect(api_module.ApiModule):
+class FaceDetect:
 
     def run_face_detect(self, url: str):
         logging.info('Querying Vision API for %s', url)
 
-        face_json = self.call(url)['responses'][0]
+        face_json = self.annotate_image(url)['responses'][0]
 
         xyz_to_coord = lambda p: Coordinate(p['x'], p['y'], p['z'])
         get_type = lambda lm, t: next(xyz_to_coord(l['position']) for l in lm if l['type'] == t)
@@ -53,7 +53,8 @@ class FaceDetect(api_module.ApiModule):
             if not likelihood_at_least(fa["blurredLikelihood"], "LIKELY")
         ]
 
-    def call(self, url: str) -> Dict:
+    @api_module.register
+    def annotate_image(self, url: str) -> Dict:
         assert CLOUD_KEY
         payload = {
             'requests': [
@@ -74,7 +75,7 @@ class FaceDetect(api_module.ApiModule):
 
         return response.json()
 
-    def mocked_call(self, url: str) -> Dict:
+    def mocked_annotate_image(self, url: str) -> Dict:
         return {
             'responses': [
                 {

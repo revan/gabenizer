@@ -13,12 +13,12 @@ IMGUR_KEY = os.environ.get('IMGUR_KEY')
 IMAGE_DESCRIPTION = 'https://reddit.com/r/gentlemangabers'
 
 
-class ImageUploader(api_module.ApiModule):
+class ImageUploader:
 
     def upload_image(self, final: Image, title: str) -> str:
         """ Uploads an Image to imgur."""
         final_bytes = ImageUploader._image_to_base64(image=final)
-        result = self.call(encoded=final_bytes, title=title, description=IMAGE_DESCRIPTION)
+        result = self.upload_bytes(encoded=final_bytes, title=title, description=IMAGE_DESCRIPTION)
 
         return result['data']['link']
 
@@ -30,7 +30,8 @@ class ImageUploader(api_module.ApiModule):
         return base64.b64encode(bytes_buffer.getvalue())
 
 
-    def call(self, encoded: base64.bytes_types, title: str, description: str) -> Dict:
+    @api_module.register
+    def upload_bytes(self, encoded: base64.bytes_types, title: str, description: str) -> Dict:
         assert IMGUR_KEY
 
         dataupload = {
@@ -46,7 +47,7 @@ class ImageUploader(api_module.ApiModule):
 
         return req.json()
 
-    def mocked_call(self, encoded: base64.bytes_types, title: str, description: str) -> Dict:
+    def mocked_upload_bytes(self, encoded: base64.bytes_types, title: str, description: str) -> Dict:
         return {
             'data': {
                 'id': 'ZClFAdK',

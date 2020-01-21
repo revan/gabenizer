@@ -1,34 +1,26 @@
 
-import abc
 import inspect
+import functools
 
 # Setting this to True will cause all henceforth constructed ApiModules to use mock calls.
 use_mocks = False
 
+_MOCK_PREFIX = 'mocked_'
 
-class ApiModule(abc.ABC):
 
-    def __init__(self):
-        """Maybe overridees call() with mocked_call(), checking signatures match."""
-        mocked_call_sig = dict(inspect.signature(self.mocked_call).parameters)
-        original_mocked_call_sig = dict(inspect.signature(ApiModule.mocked_call).parameters)
-        del original_mocked_call_sig['self']
+def register(func):
+    """Decorator for a call to an expensive operation.
 
-        if original_mocked_call_sig != mocked_call_sig:
-            # We've overridden mocked_call()
-            assert mocked_call_sig == inspect.signature(self.call).parameters
-
+    For a decorated methdod `f`, the class must also define a method `mocked_f`.
+    """
+    @functools.wraps(func)
+    def wrap(self, *args, **kwargs):
         if use_mocks:
-            self.call = self.mocked_call
+            mocked_func = self.__class__.__dict__[_MOCK_PREFIX + func.__name__]
+            assert inspect.signature(mocked_func).parameters == inspect.signature(func).parameters
 
-    @abc.abstractmethod
-    def call(self, *args, **kwargs):
-        """Call to whatever expensive operations this ApiModule preforms."""
-        pass
+            return mocked_func(self, *args, **kwargs)
+        else:
+            return func(self, *args, **kwargs)
 
-    def mocked_call(self, *args, **kwargs):
-        """Optional mock implementation of call(), for use in testing.
-
-        If defined, signature must match call().
-        """
-        pass
+    return wrap

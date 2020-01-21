@@ -59,7 +59,7 @@ def reddit() -> praw.Reddit:
     return _reddit_instance
 
 
-class SubredditFetcher(api_module.ApiModule):
+class SubredditFetcher:
     """Gets list of recent posts from a subreddit."""
     
     def get_unprocessed_posts(
@@ -74,8 +74,8 @@ class SubredditFetcher(api_module.ApiModule):
         # we don't run the risk of having our own recent posts get ahead of the source.
         # A better solution would be to use an external database to log processed urls.
         our_recent_title_set = {submission.title
-                                for submission in self.call(our_subreddit, limit=limit_ours, fetch_type='new')}
-        target_recent = self.call(target_subreddit, limit=limit_target, fetch_type='hot')
+                                for submission in self.fetch(our_subreddit, limit=limit_ours, fetch_type='new')}
+        target_recent = self.fetch(target_subreddit, limit=limit_target, fetch_type='hot')
 
         unprocessed_posts = []
         for post in target_recent:
@@ -95,7 +95,8 @@ class SubredditFetcher(api_module.ApiModule):
             return parsed.geturl() + '.png'
         return None
 
-    def call(self, subreddit: str, limit: int, fetch_type: str = 'hot') -> List[Post]:
+    @api_module.register
+    def fetch(self, subreddit: str, limit: int, fetch_type: str = 'hot') -> List[Post]:
         sub_instance = reddit().subreddit(subreddit)
         if fetch_type == 'hot':
             return [Post.from_submission(submission) for submission in sub_instance.hot(limit=limit)]
@@ -104,23 +105,24 @@ class SubredditFetcher(api_module.ApiModule):
         else:
             raise NotImplementedError('unknown value for fetch_type: %s' % fetch_type)
 
-    def mocked_call(self, subreddit: str, limit: int, fetch_type: str = 'hot') -> List[Post]:
+    def mocked_fetch(self, subreddit: str, limit: int, fetch_type: str = 'hot') -> List[Post]:
         return [
             Post(title='Fake %d' % i, url='https://i.imgur.com/ZClFAdK.jpg',
                  permalink='https://www.reddit.com/fakepermalink')
             for i in range(limit)]
 
 
-class LinkSubmitter(api_module.ApiModule):
+class LinkSubmitter:
 
     def post_link(self, url: str, title: str, source: str, subreddit: str = OUR_SUBREDDIT) -> None:
-        self.call(url=url, title=title, comment=LinkSubmitter._format_comment(source=source), subreddit=subreddit)
+        self.submit(url=url, title=title, comment=LinkSubmitter._format_comment(source=source), subreddit=subreddit)
 
     @staticmethod
     def _format_comment(source: str) -> str:
         return '[Source](%s)' % source
 
-    def call(self, url: str, title: str, comment: str, subreddit: str) -> None:
+    @api_module.register
+    def submit(self, url: str, title: str, comment: str, subreddit: str) -> None:
         logging.info('Posting submission for %s.', url)
         # TODO: use submit_image in place of image_uploader module
         submission = reddit().subreddit(subreddit).submit(
@@ -131,5 +133,5 @@ class LinkSubmitter(api_module.ApiModule):
         logging.info('Posting comment %s.', comment)
         submission.reply(comment)
 
-    def mocked_call(self, url: str, title: str, comment: str, subreddit: str) -> None:
+    def mocked_submit(self, url: str, title: str, comment: str, subreddit: str) -> None:
         pass
