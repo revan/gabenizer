@@ -62,29 +62,17 @@ def reddit() -> praw.Reddit:
 class SubredditFetcher:
     """Gets list of recent posts from a subreddit."""
     
-    def get_unprocessed_posts(
-            self,
-            target_subreddit: str = TARGET_SUBREDDIT,
-            our_subreddit: str = OUR_SUBREDDIT,
-            limit_target: int = 10,
-            limit_ours: int = 100,
-    ) -> List[Post]:
-        # Hack: to avoid duplicates, we filter out any posts with the same title as our subreddit's recent posts.
-        # This only works because we don't change the post titles, and because since we have a single source subreddit,
-        # we don't run the risk of having our own recent posts get ahead of the source.
-        # A better solution would be to use an external database to log processed urls.
-        our_recent_title_set = {submission.title
-                                for submission in self.fetch(our_subreddit, limit=limit_ours, fetch_type='new')}
+    def get_recent_posts(self, target_subreddit: str = TARGET_SUBREDDIT, limit_target: int = 10) -> List[Post]:
         target_recent = self.fetch(target_subreddit, limit=limit_target, fetch_type='hot')
 
-        unprocessed_posts = []
+        posts = []
         for post in target_recent:
             post.url = self._get_normalized_url_or_none(post.url)
-            if post.url and post.title not in our_recent_title_set:
-                unprocessed_posts.append(post)
+            if post.url:
+                posts.append(post)
 
-        logging.info('Got unprocessed posts: %r', unprocessed_posts)
-        return unprocessed_posts
+        logging.info('Got posts: %r', posts)
+        return posts
 
     @staticmethod
     def _get_normalized_url_or_none(url: str) -> Optional[str]:

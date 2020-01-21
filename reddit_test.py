@@ -12,29 +12,14 @@ class SubredditFetcherTest(unittest.TestCase):
     def test_filters_already_processed(self):
         fetcher = reddit.SubredditFetcher()
 
-        unprocessed = fetcher.get_unprocessed_posts(
+        unprocessed = fetcher.get_recent_posts(
             target_subreddit='target_subreddit',
-            our_subreddit='our_subreddit',
-            limit_target=5,
-            limit_ours=3,
+            limit_target=3,
         )
 
         self.assertEqual(
             [p.title for p in unprocessed],
-            ['Fake 3', 'Fake 4'],
-        )
-
-    def test_no_results(self):
-        fetcher = reddit.SubredditFetcher()
-
-        self.assertEqual(
-            fetcher.get_unprocessed_posts(
-                target_subreddit='target_subreddit',
-                our_subreddit='our_subreddit',
-                limit_target=5,
-                limit_ours=10,
-            ),
-            [],
+            ['Fake 0', 'Fake 1', 'Fake 2'],
         )
 
     def test_normalize_url_noop(self):
