@@ -4,7 +4,7 @@ chardet==3.0.4
 google-cloud-datastore==1.10.0
 idna==2.8
 mock==3.0.5
-numpy==1.17.2
+numpy==1.22.0
 Pillow==6.2.0
 praw==6.3.1
 prawcore==1.0.1
